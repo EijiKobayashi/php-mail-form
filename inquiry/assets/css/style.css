@@ -1,0 +1,20 @@
+div.control.is-error > span {
+  color: red;
+}
+
+div.control.is-error > input,
+div.control.is-error > select,
+div.control.is-error > textarea {
+  border-color: red;
+  background-color: rgba(200, 0, 0, 0.1);
+}
+
+div.control.is-error > .error-message {
+  display: block;
+}
+
+.error-message {
+  display: none;
+  color: red;
+  font-size: 12px;
+}

@@ -22,7 +22,7 @@ $page_title = '入力フォーム画面';
             </ol>
           </div><!--  / .steps /  -->
           <p class="inquiry__notice">お問い合わせは下記フォームよりお願いします。すべての項目にご記入の上、ご送信ください。</p>
-          <form method="post" action="/inquiry/confirmation" name="application" id="application" class="application h-adr" enctype="multipart/form-data">
+          <form method="post" action="/inquiry/confirmation/" name="application" id="application" class="application h-adr" enctype="multipart/form-data" novalidate>
             <input type="hidden" class="p-country-name" value="Japan">
             <input type="hidden" name="check" id="check" value="confirmation" />
             <input type="hidden" name="token" id="token" value="<?php echo $_SESSION['token']; ?>" />
@@ -40,18 +40,21 @@ $page_title = '入力フォーム画面';
                       echo ' selected="selected"';
                     } ?>>資料請求</option>
                 </select>
+                <span class="error-message"></span>
               </div>
             </div><!--  / .group /  -->
             <div class="group">
               <div class="label"><label for="name">お名前 <span class="require">必須</span></label></div>
               <div class="control">
                 <input type="text" name="name" id="name" class="large" maxlength="100" size="" value="<?php echo $name; ?>" placeholder="お名前" required />
+                <span class="error-message"></span>
               </div>
             </div><!--  / .group /  -->
             <div class="group">
               <div class="label"><label for="email">メールアドレス <span class="require">必須</span></label></div>
               <div class="control">
                 <input type="email" name="email" id="email" class="large" maxlength="100" size="" value="<?php echo $email; ?>" placeholder="メールアドレス" data-conv-half-alphanumeric="true" required />
+                <span class="error-message"></span>
               </div>
             </div><!--  / .group /  -->
             <div class="group">
@@ -76,6 +79,7 @@ $page_title = '入力フォーム画面';
               <div class="label"><label for="content">質問等 <span class="require">必須</span></label></div>
               <div class="control">
                 <textarea name="content" id="content" class="large" cols="50" rows="5" placeholder="質問等をご記載ください" required><?php echo $content; ?></textarea>
+                <span class="error-message"></span>
               </div>
             </div><!--  / .group /  -->
             <div class="notice">

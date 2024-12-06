@@ -1,32 +1,69 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('application');
+  const form = document.getElementById('application');
+  const inputElements = form.querySelectorAll('input, select, textarea');
 
-    form.addEventListener('submit', (event) => {
-        let valid = true;
-        const requiredFields = ['subject', 'name', 'email', 'content'];
-        const emailField = document.getElementById('email');
-        const errors = [];
+  form.addEventListener(
+    'submit',
+    (e) => {
+      e.preventDefault();
+      let hasError = false;
 
-        requiredFields.forEach((fieldId) => {
-            const field = document.getElementById(fieldId);
-            if (!field || field.value.trim() === '') {
-                valid = false;
-                errors.push(`${fieldId} は必須です。`);
-            }
-        });
-
-        // Email validation
-        if (emailField) {
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(emailField.value)) {
-                valid = false;
-                errors.push('メールアドレスの形式が正しくありません。');
-            }
+      inputElements.forEach((element) => {
+        const div = element.closest('div.control');
+        if (div) {
+          div.classList.remove('is-error');
+        }
+        const errorMessage = element.nextElementSibling;
+        if (errorMessage && errorMessage.classList.contains('error-message')) {
+          errorMessage.textContent = '';
         }
 
-        if (!valid) {
-            event.preventDefault();
-            alert(errors.join('\n'));
+        // Check for select with empty value
+        if (element.tagName === 'SELECT' && element.value === '') {
+          if (div) {
+            div.classList.add('is-error');
+          }
+          if (errorMessage) {
+            errorMessage.textContent = 'この項目は必須です。';
+          }
+          hasError = true;
         }
+      });
+
+      const isValid = form.checkValidity();
+      if (isValid && !hasError) {
+        alert('submit!');
+      }
+    },
+    { passive: false }
+  );
+
+  inputElements.forEach((element) => {
+    element.addEventListener('invalid', (e) => {
+      const $this = e.currentTarget;
+      const div = $this.closest('div.control');
+      if (div) {
+        div.classList.add('is-error');
+      }
+      const errorMessage = $this.nextElementSibling;
+      if (errorMessage && errorMessage.classList.contains('error-message')) {
+        errorMessage.textContent = $this.validationMessage;
+      }
     });
+
+    // For select, handle change event to clear errors
+    if (element.tagName === 'SELECT') {
+      element.addEventListener('change', (e) => {
+        const $this = e.currentTarget;
+        const div = $this.closest('div.control');
+        if (div) {
+          div.classList.remove('is-error');
+        }
+        const errorMessage = $this.nextElementSibling;
+        if (errorMessage && errorMessage.classList.contains('error-message')) {
+          errorMessage.textContent = '';
+        }
+      });
+    }
+  });
 });
