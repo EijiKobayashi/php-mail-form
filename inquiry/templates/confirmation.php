@@ -23,7 +23,7 @@ $page_title = '確認画面';
             </ol>
           </div><!--  / .steps /  -->
           <p class="inquiry__notice">必要事項をご入力の上、「送信する」ボタンを押してください。</p>
-          <form method="post" action="/inquiry/send" name="application" id="application" class="application" enctype="multipart/form-data">
+          <form method="post" action="/inquiry/send/" name="application" id="application" class="application" enctype="multipart/form-data">
             <input type="hidden" name="check" id="check" value="send" />
             <input type="hidden" name="token" id="token" value="<?php echo $token; ?>" />
             <input type="hidden" name="session_token" id="session_token" value="<?php echo $session_token; ?>" />
