@@ -1,9 +1,16 @@
+<?php
+if (!defined('APP_RUN')) {
+    http_response_code(403);
+    exit('Access denied');
+}
+$page_title = $page_title ?? 'お問い合わせ';
+?>
 <!DOCTYPE html>
-<html lang="ja" class="">
+<html lang="ja">
 
 <head>
   <meta charset="utf-8">
-  <title><?php echo $page_title ?> - お問い合わせ｜テストページ</title>
+  <title><?= h($page_title) ?> - お問い合わせ｜テストページ</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="robots" content="noimageindex, noarchive">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">

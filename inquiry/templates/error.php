@@ -1,10 +1,11 @@
 <?php
-session_start();
-session_unset();
-session_destroy();
+if (!defined('APP_RUN')) {
+    http_response_code(403);
+    exit('Access denied');
+}
 $page_title = 'エラー画面';
 ?>
-<?php include(dirname(__FILE__) . '/_module_header.inc'); ?>
+<?php include __DIR__ . '/_module_header.inc'; ?>
 
 <main>
   <div class="main">
@@ -14,14 +15,13 @@ $page_title = 'エラー画面';
         <div class="inquiry section">
           <h2 class="inquiry__title section__title">お問い合わせ</h2>
 
-          <form>
-            <div class="inquiry__thanks">
-              <h4>エラーです。</h4>
-            </div>
-            <div class="submit">
-              <a href="./inquiry" class="button button__return"><i class="icon ion-md-arrow-back"></i> メールフォームへ戻る</a>
-            </div>
-          </form>
+          <div class="inquiry__thanks">
+            <h4>不正なアクセス、またはセッションの有効期限が切れました。</h4>
+            <p>お手数ですが、もう一度最初から入力をお願いいたします。</p>
+          </div>
+          <div class="submit">
+            <a href="/inquiry/" class="button button__return"><i class="icon ion-md-arrow-back"></i> メールフォームへ戻る</a>
+          </div>
         </div><!--  / .inquiry /  -->
       </section>
 
@@ -29,4 +29,7 @@ $page_title = 'エラー画面';
   </div><!--  / #main /  -->
 </main>
 
-<?php include(dirname(__FILE__) . '/_module_footer.inc'); ?>
+<?php
+clear_csrf_token();
+include __DIR__ . '/_module_footer.inc';
+?>

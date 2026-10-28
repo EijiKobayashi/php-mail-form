@@ -1,6 +1,12 @@
+<?php
+if (!defined('APP_RUN')) {
+    http_response_code(403);
+    exit('Access denied');
+}
+?>
 <footer>
   <div class="footer">
-    <address class="footer__copyrights">&#169; <?php echo date('Y'); ?> Oshinco Co-po. All Rights Reserved.</address>
+    <address class="footer__copyrights">&#169; <?= date('Y') ?> Oshinco Co-po. All Rights Reserved.</address>
   </div><!--  / #footer /  -->
 </footer>
 

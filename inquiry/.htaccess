@@ -1,7 +1,22 @@
+# Protect sensitive configuration and include files from direct access
+<FilesMatch "^(config\.php|.*\.inc)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
 RewriteEngine on
 RewriteOptions MaxRedirects=1
 RewriteBase /inquiry/
+
+# Block direct access to templates directory
+RewriteRule ^templates/ - [F,L]
+
 RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

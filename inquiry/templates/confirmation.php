@@ -1,12 +1,11 @@
 <?php
-session_start();
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || $_POST['token'] !== $_SESSION['token']) {
-  header('Location: ./error');
-  exit;
+if (!defined('APP_RUN')) {
+    http_response_code(403);
+    exit('Access denied');
 }
 $page_title = '確認画面';
 ?>
-<?php include(dirname(__FILE__) . '/_module_header.inc'); ?>
+<?php include __DIR__ . '/_module_header.inc'; ?>
 
 <main>
   <div class="main">
@@ -22,105 +21,86 @@ $page_title = '確認画面';
               <li class="step step3"><span>完了</span></li>
             </ol>
           </div><!--  / .steps /  -->
-          <p class="inquiry__notice">必要事項をご入力の上、「送信する」ボタンを押してください。</p>
-          <form method="post" action="/inquiry/send/" name="application" id="application" class="application" enctype="multipart/form-data">
-            <input type="hidden" name="check" id="check" value="send" />
-            <input type="hidden" name="token" id="token" value="<?php echo $token; ?>" />
-            <input type="hidden" name="session_token" id="session_token" value="<?php echo $session_token; ?>" />
-            <input type="hidden" name="subject" value="<?php echo $subject; ?>" />
-            <input type="hidden" name="name" id="name" value="<?php echo $name; ?>" />
-            <input type="hidden" name="email" id="email" value="<?php echo $email; ?>" />
-            <input type="hidden" name="postal_code" id="postal_code" value="<?php echo $postal_code; ?>" />
-            <input type="hidden" name="address" id="address" value="<?php echo $address; ?>" />
-            <input type="hidden" name="phone" id="phone" value="<?php echo $phone; ?>" />
-            <input type="hidden" name="content" id="content" value="<?php echo $content; ?>" />
+          <p class="inquiry__notice">必要事項をご確認の上、「送信する」ボタンを押してください。</p>
+          <form method="post" action="/inquiry/send/" name="application" id="application" class="application">
+            <input type="hidden" name="token" id="token" value="<?= h(generate_csrf_token()) ?>" />
+            <input type="hidden" name="subject" value="<?= h($form_data['subject']) ?>" />
+            <input type="hidden" name="name" id="name" value="<?= h($form_data['name']) ?>" />
+            <input type="hidden" name="email" id="email" value="<?= h($form_data['email']) ?>" />
+            <input type="hidden" name="postal_code" id="postal_code" value="<?= h($form_data['postal_code']) ?>" />
+            <input type="hidden" name="address" id="address" value="<?= h($form_data['address']) ?>" />
+            <input type="hidden" name="phone" id="phone" value="<?= h($form_data['phone']) ?>" />
+            <input type="hidden" name="content" id="content" value="<?= h($form_data['content']) ?>" />
+
             <div class="group">
-              <div class="label"><label for="subject">件名: <!--span class="require">必須</span--></label></div>
+              <div class="label"><label>件名:</label></div>
               <div class="control">
                 <div class="control__confirmation">
-                  <?php if ($subject) {
-                    echo $subject;
-                  } else {
-                    echo '─';
-                  } ?></div>
+                  <?= !empty($form_data['subject']) ? h($form_data['subject']) : '─' ?>
+                </div>
               </div>
             </div><!--  / .group /  -->
 
             <div class="group">
-              <div class="label"><label for="name">お名前: <!--span class="require">必須</span--></label></div>
+              <div class="label"><label>お名前:</label></div>
               <div class="control">
                 <div class="control__confirmation">
-                  <?php if ($name) {
-                    echo $name;
-                  } else {
-                    echo '─';
-                  } ?></div>
+                  <?= !empty($form_data['name']) ? h($form_data['name']) : '─' ?>
+                </div>
               </div>
             </div><!--  / .group /  -->
+
             <div class="group">
-              <div class="label"><label for="email">メールアドレス: <!--span class="require">必須</span--></label></div>
+              <div class="label"><label>メールアドレス:</label></div>
               <div class="control">
                 <div class="control__confirmation">
-                  <?php if ($email) {
-                    echo $email;
-                  } else {
-                    echo '─';
-                  } ?></div>
+                  <?= !empty($form_data['email']) ? h($form_data['email']) : '─' ?>
+                </div>
               </div>
             </div><!--  / .group /  -->
+
             <div class="group">
-              <div class="label"><label for="postal_code">住所: <!--span class="require">必須</span--></label></div>
+              <div class="label"><label>郵便番号:</label></div>
               <div class="control">
                 <div class="control__confirmation">
-                  <?php if ($postal_code) {
-                    echo $postal_code;
-                  } else {
-                    echo '─';
-                  } ?></div>
+                  <?= !empty($form_data['postal_code']) ? h($form_data['postal_code']) : '─' ?>
+                </div>
               </div>
             </div><!--  / .group /  -->
+
             <div class="group">
-              <div class="label"><label for="address">ご住所: <!--span class="require">必須</span--></label></div>
+              <div class="label"><label>ご住所:</label></div>
               <div class="control">
                 <div class="control__confirmation">
-                  <?php if ($address) {
-                    echo $address;
-                  } else {
-                    echo '─';
-                  } ?></div>
+                  <?= !empty($form_data['address']) ? h($form_data['address']) : '─' ?>
+                </div>
               </div>
             </div><!--  / .group /  -->
+
             <div class="group">
-              <div class="label"><label for="phone">電話番号: <!--span class="require">必須</span--></label></div>
+              <div class="label"><label>電話番号:</label></div>
               <div class="control">
                 <div class="control__confirmation">
-                  <?php if ($phone) {
-                    echo $phone;
-                  } else {
-                    echo '─';
-                  } ?></div>
+                  <?= !empty($form_data['phone']) ? h($form_data['phone']) : '─' ?>
+                </div>
               </div>
             </div><!--  / .group /  -->
+
             <div class="group">
-              <div class="label"><label for="content">質問等: </label></div>
+              <div class="label"><label>質問等:</label></div>
               <div class="control">
                 <div class="control__confirmation">
-                  <?php if ($content) {
-                    echo nl2br($content);
-                  } else {
-                    echo '─';
-                  } ?></div>
+                  <?= !empty($form_data['content']) ? nl2br(h($form_data['content'])) : '─' ?>
+                </div>
               </div>
             </div><!--  / .group /  -->
+
             <div class="notice">
               <p></p>
             </div><!--  / .notice /  -->
             <div class="submit">
-              <button type="submit" class="button"
-                <?php if (is_valid_required() == FALSE) {
-                  echo ' disabled="disabled"';
-                } ?>>送信する <i class="icon ion-md-arrow-forward"></i></button>
-              <a href="javascript:document.forms.application.action='/inquiry/';document.forms.application.submit();" class="button button__return"><i class="icon ion-md-arrow-back"></i> 戻る</a>
+              <button type="submit" class="button">送信する <i class="icon ion-md-arrow-forward"></i></button>
+              <button type="submit" name="back" value="1" formaction="/inquiry/" class="button button__return" formnovalidate><i class="icon ion-md-arrow-back"></i> 戻る</button>
             </div>
           </form>
         </div><!--  / .inquiry /  -->
@@ -130,4 +110,4 @@ $page_title = '確認画面';
   </div><!--  / #main /  -->
 </main>
 
-<?php include(dirname(__FILE__) . '/_module_footer.inc'); ?>
+<?php include __DIR__ . '/_module_footer.inc'; ?>

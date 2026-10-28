@@ -1,7 +1,11 @@
 <?php
+if (!defined('APP_RUN')) {
+    http_response_code(403);
+    exit('Access denied');
+}
 $page_title = '完了画面';
 ?>
-<?php include(dirname(__FILE__) . '/_module_header.inc'); ?>
+<?php include __DIR__ . '/_module_header.inc'; ?>
 
 <main>
   <div class="main">
@@ -17,16 +21,14 @@ $page_title = '完了画面';
               <li class="step step3 is-current"><span>完了</span></li>
             </ol>
           </div><!--  / .steps /  -->
-          <form>
-            <div class="inquiry__thanks">
-              <h4><i class="icon ion-md-paper-plane"></i></h4>
-              <p>お問い合わせありがとうございました。<br>後ほど、スタッフよりメールまたはお電話にて連絡をさせていただきます。<br>今しばらくお待ちくださいますようお願い申し上げます。</p>
-              <p>1週間以上連絡がない場合は、<br>お手数ですがお電話 03-0000-2222 までご連絡いただけますと幸いです。</p>
-            </div>
-            <div class="submit">
-              <a href="/" class="button button__return"><i class="icon ion-md-arrow-back"></i> ホームへ戻る</a>
-            </div>
-          </form>
+          <div class="inquiry__thanks">
+            <h4><i class="icon ion-md-paper-plane"></i></h4>
+            <p>お問い合わせありがとうございました。<br>後ほど、スタッフよりメールまたはお電話にて連絡をさせていただきます。<br>今しばらくお待ちくださいますようお願い申し上げます。</p>
+            <p>1週間以上連絡がない場合は、<br>お手数ですがお電話 03-0000-2222 までご連絡いただけますと幸いです。</p>
+          </div>
+          <div class="submit">
+            <a href="/" class="button button__return"><i class="icon ion-md-arrow-back"></i> ホームへ戻る</a>
+          </div>
         </div><!--  / .inquiry /  -->
       </section>
 
@@ -35,7 +37,6 @@ $page_title = '完了画面';
 </main>
 
 <?php
-session_start();
-session_unset();
-session_destroy();
-include(dirname(__FILE__) . '/_module_footer.inc'); ?>
+clear_csrf_token();
+include __DIR__ . '/_module_footer.inc';
+?>

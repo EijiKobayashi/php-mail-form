@@ -1,11 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('application');
+  if (!form) {
+    return;
+  }
+
   const inputElements = form.querySelectorAll('input, select, textarea');
 
   form.addEventListener(
     'submit',
     (e) => {
-      e.preventDefault();
+      // If submitted via "back" button, bypass client validation
+      if (e.submitter && e.submitter.name === 'back') {
+        return;
+      }
+
       let hasError = false;
 
       inputElements.forEach((element) => {
@@ -18,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
           errorMessage.textContent = '';
         }
 
-        // Check for select with empty value
-        if (element.tagName === 'SELECT' && element.value === '') {
+        // Custom validation for required select
+        if (element.tagName === 'SELECT' && element.hasAttribute('required') && element.value === '') {
           if (div) {
             div.classList.add('is-error');
           }
@@ -31,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const isValid = form.checkValidity();
-      if (isValid && !hasError) {
-        alert('submit!');
+      if (!isValid || hasError) {
+        e.preventDefault();
       }
     },
     { passive: false }
@@ -51,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // For select, handle change event to clear errors
     if (element.tagName === 'SELECT') {
       element.addEventListener('change', (e) => {
         const $this = e.currentTarget;
@@ -62,6 +69,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorMessage = $this.nextElementSibling;
         if (errorMessage && errorMessage.classList.contains('error-message')) {
           errorMessage.textContent = '';
+        }
+      });
+    }
+
+    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+      element.addEventListener('input', (e) => {
+        const $this = e.currentTarget;
+        if ($this.checkValidity()) {
+          const div = $this.closest('div.control');
+          if (div) {
+            div.classList.remove('is-error');
+          }
+          const errorMessage = $this.nextElementSibling;
+          if (errorMessage && errorMessage.classList.contains('error-message')) {
+            errorMessage.textContent = '';
+          }
         }
       });
     }
